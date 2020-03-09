@@ -9,13 +9,13 @@ function findPlayCtrl() {
         if (document.querySelector('.playbar_ct')) {
             const title = document.querySelector('.playbar_ct .track_info > .title');
             const artist = document.querySelector('.playbar_ct .track_info > .artist');
-			const progress = document.querySelector('.playtime > input');
-			const timeAll = document.querySelector('.playtime > .time_all');
-			const timeCurrent = document.querySelector('.playtime > .time_current');
+            const progress = document.querySelector('.playtime > input');
+            const timeAll = document.querySelector('.playtime > .time_all');
+            const timeCurrent = document.querySelector('.playtime > .time_current');
             const thumbCssUrl = document.querySelector('.playbar_ct .thumb').style.backgroundImage;
             const thumbUrlStr = thumbCssUrl.slice(5, thumbCssUrl.length -2);
             if (thumbUrlStr.length > 0) {
-				if (thumbUrlStr === '/img/default-image.svg') return;
+                if (thumbUrlStr === '/img/default-image.svg') return;
                 const thumbUrl = new URL(thumbUrlStr);
                 const thumb = thumbUrl.origin + thumbUrl.pathname;
                 
@@ -48,24 +48,24 @@ function findPlayCtrl() {
                     navigator.mediaSession.setActionHandler('nexttrack', function () {
                         document.querySelector('.btn-player-next').click();
                     });
-					
-					navigator.mediaSession.setActionHandler('seekbackward', function() {
-						const timeA = timeAll.innerText.split(':');
-						const timeC = timeCurrent.innerText.split(':');
-						progress.value = ((parseInt(timeC[0]) * 60 + parseInt(timeC[1])) - 10) * 100 / (parseInt(timeA[0]) * 60 + parseInt(timeA[1]));
-						progress.click();
-					});
-					navigator.mediaSession.setActionHandler('seekforward', function() {
-						const timeA = timeAll.innerText.split(':');
-						const timeC = timeCurrent.innerText.split(':');
-						progress.value = ((parseInt(timeC[0]) * 60 + parseInt(timeC[1])) + 10) * 100 / (parseInt(timeA[0]) * 60 + parseInt(timeA[1]));
-						progress.click();
-					});
-					navigator.mediaSession.setActionHandler('stop', function() {
-						// TODO Stop
-						console.log('stop');
-					});
-					
+                    
+                    navigator.mediaSession.setActionHandler('seekbackward', function() {
+                        const timeA = timeAll.innerText.split(':');
+                        const timeC = timeCurrent.innerText.split(':');
+                        progress.value = ((parseInt(timeC[0]) * 60 + parseInt(timeC[1])) - 10) * 100 / (parseInt(timeA[0]) * 60 + parseInt(timeA[1]));
+                        progress.click();
+                    });
+                    navigator.mediaSession.setActionHandler('seekforward', function() {
+                        const timeA = timeAll.innerText.split(':');
+                        const timeC = timeCurrent.innerText.split(':');
+                        progress.value = ((parseInt(timeC[0]) * 60 + parseInt(timeC[1])) + 10) * 100 / (parseInt(timeA[0]) * 60 + parseInt(timeA[1]));
+                        progress.click();
+                    });
+                    navigator.mediaSession.setActionHandler('stop', function() {
+                        // TODO Stop
+                        console.log('stop');
+                    });
+                    
                 }
             }
         }
@@ -77,19 +77,19 @@ function findPlayCtrl() {
         findPlayCtrl();    
     });
     observer.observe(document.body, { subtree: true, attributes: true, childList: true, characterData: true });
-	const positionInterval = window.setInterval(() => {
-	if ('mediaSession' in navigator) {
-		const playBtn = document.querySelector('button.icon-player');
-		navigator.mediaSession.playbackState = playBtn.classList.contains('btn-player-pause') ? 'playing' : playBtn.classList.contains('btn-player-play') ? 'paused' : 'none';
-		const progress = document.querySelector('.playtime > input');
-		// TODO Seeking (seekto; https://w3c.github.io/mediasession/#dom-mediasessionaction-seekto)
-		navigator.mediaSession.setPositionState({
-			duration: progress.max,
-			playbackRate: 1,
-			position: progress.value
-		});
-	} else {
-		window.clearInterval(positionInterval);
-	}
+    const positionInterval = window.setInterval(() => {
+    if ('mediaSession' in navigator) {
+        const playBtn = document.querySelector('button.icon-player');
+        navigator.mediaSession.playbackState = playBtn.classList.contains('btn-player-pause') ? 'playing' : playBtn.classList.contains('btn-player-play') ? 'paused' : 'none';
+        const progress = document.querySelector('.playtime > input');
+        // TODO Seeking (seekto; https://w3c.github.io/mediasession/#dom-mediasessionaction-seekto)
+        navigator.mediaSession.setPositionState({
+            duration: progress.max,
+            playbackRate: 1,
+            position: progress.value
+        });
+    } else {
+        window.clearInterval(positionInterval);
+    }
 }, 1000);
 })();
