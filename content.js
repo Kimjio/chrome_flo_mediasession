@@ -83,11 +83,13 @@ function findPlayCtrl() {
         navigator.mediaSession.playbackState = playBtn.classList.contains('btn-player-pause') ? 'playing' : playBtn.classList.contains('btn-player-play') ? 'paused' : 'none';
         const progress = document.querySelector('.playtime > input');
         // TODO Seeking (seekto; https://w3c.github.io/mediasession/#dom-mediasessionaction-seekto)
-        navigator.mediaSession.setPositionState({
-            duration: progress.max,
-            playbackRate: 1,
-            position: progress.value
-        });
+        if ('setPositionState' in navigator.mediaSession) {
+            navigator.mediaSession.setPositionState({
+                duration: progress.max,
+                playbackRate: 1,
+                position: progress.value
+            });
+        }
     } else {
         window.clearInterval(positionInterval);
     }
